@@ -47,7 +47,10 @@ server <- function(input, output) {
     
     
     output$distPlot <- renderPlotly({
-        mydata_fit <- mydata %>% select(region_x, continent, annee, emissions_totale, variation_temperature, population_totale) %>% filter(region_x %in% input$region, annee == input$year) %>% group_by(region_x)
+        mydata_fit <- mydata %>%
+            select(region_x, continent, annee, emissions_totale, variation_temperature, population_totale) %>%
+            filter(region_x %in% input$region, annee == input$year) %>%
+            group_by(region_x)
         x <- mydata_fit$variation_temperature
         y <- mydata_fit$emissions_totale
         pop <- mydata_fit$population_totale
@@ -63,11 +66,13 @@ server <- function(input, output) {
             yaxis = list(title = "Emissions totale",range = c(-4336,13529294)))
     })
     
-    output$table <- renderDataTable(
-        datatable({
-            data <- mydata %>% select(region_x, continent, annee, emissions_totale, variation_temperature, population_totale) %>% filter(region_x %in% input$region, annee == input$year) %>% group_by(region_x)
-        },options =list(paging = FALSE))
-    )
+    output$table <- renderDataTable({
+        datatable(mydata %>% select(region_x, continent, annee, emissions_totale, variation_temperature, population_totale) %>% filter(region_x %in% input$region, annee == input$year) %>% group_by(region_x), options = list(
+            lengthMenu = list(c(10, 20, -1), c('10', '20', 'All')),
+            pageLength = 10
+        ))
+        
+    })
     
     output$map <- renderLeaflet({
         mydata_fit = mydata %>% filter(annee== input$year)
