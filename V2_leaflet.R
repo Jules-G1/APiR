@@ -3,7 +3,7 @@ library(tidyverse)
 
 
 #coordonnees gps des regions 
-data=read.csv(file='co2_temperature_pop_gps.csv',sep=';')
+data=read.csv(file='co2_temperature_pop.csv',sep=';')
 data
 
 #map avec pop up sur chaque region 
