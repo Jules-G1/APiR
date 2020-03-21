@@ -29,9 +29,9 @@ ui <- fluidPage(
         
         mainPanel(
             tabsetPanel(type = "tabs",
-                        tabPanel("Plot", plotlyOutput("distPlot")),
-                        tabPanel("Map", leafletOutput("map")),
-                        tabPanel("Table", dataTableOutput("table"))
+                        tabPanel("Plot", br(), plotlyOutput("distPlot")),
+                        tabPanel("Map", br(),leafletOutput("map")),
+                        tabPanel("Table", br(),dataTableOutput("table"))
             )
         )
     )
