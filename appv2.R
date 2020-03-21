@@ -5,7 +5,7 @@ library(plotly)
 library(leaflet)
 library(DT)
 
-mydata <- read.csv("co2_temperature_pop.csv", header = T, sep=";", dec=".")
+mydata <- read.csv("co2_temperature_pop.csv", header = T, sep=",", dec=".")
 
 # Define UI for app
 ui <- fluidPage(
