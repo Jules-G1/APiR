@@ -51,13 +51,11 @@ server <- function(input, output) {
         x <- mydata_fit$variation_temperature
         y <- mydata_fit$emissions_totale
         
-        slope <- 0.000009
-        mydata_fit$size <- sqrt(mydata_fit$population_totale * slope)
-        colors <- c('#4AC6B7', '#1972A4', '#965F8A', '#FF7070', '#C61951')
+        mydata_fit$size <- sqrt(mydata_fit$population_totale * 0.000009)
         
         fig <- plot_ly(mydata_fit, x = ~variation_temperature,
                        y = ~emissions_totale, color = ~continent,
-                       size = ~size, colors = colors,
+                       size = ~size,
                        type = 'scatter', mode = 'markers', sizes = c(min(mydata_fit$size), max(mydata_fit$size)),
                        marker = list(symbol = 'circle', sizemode = 'diameter',
                                      line = list(width = 2, color = '#FFFFFF')),
@@ -76,9 +74,8 @@ server <- function(input, output) {
                                            range = c(-1500000,13529294),
                                            zerolinewidth = 1,
                                            ticklen = 5,
-                                           gridwith = 2),
-                              paper_bgcolor = '#FFFFFF',
-                              plot_bgcolor = '#FFFFFF')
+                                           gridwith = 2))
+        
         
         fig
     })
