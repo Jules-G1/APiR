@@ -1,13 +1,10 @@
 library(shiny)
 library(tidyverse)
-library(ggplot2)
 library(plotly)
 library(leaflet)
 library(DT)
-
 mydata <- read.csv("co2_temperature_pop.csv", header = T, sep=",", dec=".")
-
-# Define UI for app
+# Define UI for application that draws a histogram
 ui <- fluidPage(
     
     # Application title
@@ -17,7 +14,7 @@ ui <- fluidPage(
         sidebarPanel(
             checkboxGroupInput("region",
                                "Select a Region",
-                               choices=levels(mydata$region),selected = levels(mydata$region)),
+                               choices=levels(mydata$region_x),selected = levels(mydata$region_x)),
             br(),
             sliderInput("year",
                         "Select a Year",
@@ -29,7 +26,7 @@ ui <- fluidPage(
         
         mainPanel(
             tabsetPanel(type = "tabs",
-                        tabPanel("Plot", br(), plotlyOutput("distPlot")),
+                        tabPanel("Plot", br(),plotlyOutput("distPlot")),
                         tabPanel("Map", br(),leafletOutput("map")),
                         tabPanel("Table", br(),dataTableOutput("table"))
             )
@@ -37,7 +34,9 @@ ui <- fluidPage(
     )
 )
 
-# Define server logic
+# Define server logic required to draw a histogram
+
+
 
 server <- function(input, output) {
     
@@ -120,5 +119,6 @@ server <- function(input, output) {
     })
 }
 
-# Run the app
+
+# Run the application 
 shinyApp(ui = ui, server = server)
