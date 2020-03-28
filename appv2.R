@@ -14,7 +14,7 @@ ui <- fluidPage(
         sidebarPanel(
             checkboxGroupInput("region",
                                "Select a Region",
-                               choices=levels(mydata$region_x),selected = levels(mydata$region_x)),
+                               choices=levels(mydata$region),selected = levels(mydata$region)),
             br(),
             sliderInput("year",
                         "Select a Year",
@@ -60,7 +60,7 @@ server <- function(input, output) {
                                      line = list(width = 2, color = '#FFFFFF')),
                        text = ~paste('Region:', region,
                                      '<br>Emissions:', emissions_totale,
-                                     '<br>Variation de température:', variation_temperature,
+                                     '<br>Variation de température:', variation_temperature,'°C',
                                      '<br>Pop.:', population_totale))
         fig <- fig %>% layout(xaxis = list(title = 'Variation de temperature (en °C)',
                                            gridcolor = 'rgb(255, 255, 255)',
