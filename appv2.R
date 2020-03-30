@@ -6,18 +6,26 @@ library(DT)
 mydata <- read.csv("co2_temperature_pop.csv", header = T, sep=",", dec=".")
 # Define UI for application that draws a histogram
 ui <- fluidPage(
+    tags$head(tags$style(
+        HTML('
+         #sidebar {
+            background-color: #284157;
+            color: white;
+        }')
+    )),
     
     # Application title
-    titlePanel("Emission of CO2 vs Temperature variations"),
+    titlePanel("Emission de C02 vs Variations de température en °C"),
+    h4("J. Guillot - C. Beretti - C. Belloir"),
     
     sidebarLayout(
-        sidebarPanel(
+        sidebarPanel( id="sidebar",
             checkboxGroupInput("region",
-                               "Select a Region",
+                               "Choisir une région :",
                                choices=levels(mydata$region),selected = levels(mydata$region)),
             br(),
             sliderInput("year",
-                        "Select a Year",
+                        "Choisir une année :",
                         min = 1990,
                         max = 2010,
                         value = 1990, animate=T)
@@ -26,10 +34,12 @@ ui <- fluidPage(
         
         mainPanel(
             tabsetPanel(type = "tabs",
-                        tabPanel("Plot", br(),plotlyOutput("distPlot")),
-                        tabPanel("Map", br(),leafletOutput("map")),
+                        tabPanel("Graphique", br(),plotlyOutput("distPlot")),
+                        tabPanel("Carte", br(),leafletOutput("map")),
                         tabPanel("Table", br(),dataTableOutput("table"))
-            )
+            ),
+            br(),
+            uiOutput("tab"),
         )
     )
 )
@@ -110,14 +120,25 @@ server <- function(input, output) {
             addCircleMarkers(lng = mydata_fit$lng, 
                              lat = mydata_fit$lat, 
                              fillOpacity = 10,
-                             popup = ~paste("Variation de la température pour la région",mydata_fit$region,
-                                            "pour l'année",mydata_fit$annee, ":", mydata_fit$variation_temperature),
+                             radius = ~ sqrt(population_totale * 0.000001),
+                             popup = ~paste("Variation de la température en °C pour la région",
+                                            mydata_fit$region,
+                                            "pour l'année",
+                                            mydata_fit$annee, ":",
+                                            mydata_fit$variation_temperature),
                              color= ~couleurs(variation_temperature)) %>% 
             addLegend(pal = couleurs,
                       values = ~variation_temperature,
+                      title = "Variation de température en °C",
                       opacity = 0.9)
     })
-}
+    
+    url <- a("FAOSTAT", href="http://www.fao.org/faostat/en/#home")
+    output$tab <- renderUI({
+        tagList("source:", url)
+    })
+    
+    }
 
 
 # Run the application 
