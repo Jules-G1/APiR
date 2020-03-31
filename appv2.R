@@ -7,15 +7,53 @@ mydata <- read.csv("co2_temperature_pop.csv", header = T, sep=",", dec=".")
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     tags$head(tags$style(
-        HTML('
-         #sidebar {
+        HTML("
+      @import url('//fonts.googleapis.com/css?family=Lobster|Cabin:400,700');
+      
+      body {
+      background-color: #C0D6DF;
+      }
+      
+      h1 {
+        font-family: 'Lobster', cursive;
+        font-size: 27px;
+        color: #284157;
+        position: center;
+      }
+      
+       h4 {
+        font-family: 'Cabin', cursive;
+        font-size: 16px;
+        font-weight: 500;
+        color: #284157;
+      }
+      
+      a {
+        font-family: 'Cabin';
+        font-weight: 400;
+        color: #284157;
+        position: right;
+      }
+      
+      @glyphicon glyphicon-play    {
+      color: crimson;
+      }
+      
+      #sidebar {
             background-color: #284157;
             color: white;
-        }')
+            padding: 10px;
+    
+        }
+      
+      #sidebar a {
+            color: coral;
+            padding: 5px;
+             }")
     )),
     
     # Application title
-    titlePanel("Emission de C02 vs Variations de température en °C"),
+    h1("Emissions de C02 et Variations de température en °C"),
     h4("J. Guillot - C. Beretti - C. Belloir"),
     
     sidebarLayout(
@@ -83,7 +121,9 @@ server <- function(input, output) {
                                            range = c(-1500000,13529294),
                                            zerolinewidth = 1,
                                            ticklen = 5,
-                                           gridwith = 2))
+                                           gridwith = 2),
+                              plot_bgcolor='rgb(192, 214, 223)',
+                              paper_bgcolor='rgb(192, 214, 223)')
         
         
         fig
@@ -97,9 +137,16 @@ server <- function(input, output) {
                       filter(region %in% input$region, annee == input$year) %>%
                       group_by(region) %>%
                       arrange(desc(emissions_totale), emissions_totale),
+                  colnames=c("région", "continent",
+                             "année", "émissions totale",
+                             "variation de température", "population totale"),
                   options = list(
                         lengthMenu = list(c(10, 20, -1), c('10', '20', 'All')),
-                        pageLength = 10
+                        pageLength = 10,
+                        initComplete = JS(
+                          "function(settings, json) {",
+                          "$(this.api().table().header()).css({'background-color': '#284157', 'color': '#C0D6DF'});",
+                          "}")
         )) 
         
     })
